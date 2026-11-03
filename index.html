@@ -49,6 +49,66 @@
         }
         .unselect-btn:hover { background: #c0392b; }
 
+        /* Collapsible Bottom Panel Styles */
+        .disclaimer-panel {
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            z-index: 1001;
+            font-size: 12px;
+            color: #495057;
+        }
+
+        .disclaimer-header {
+            padding: 8px 15px;
+            background: #e9ecef;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .disclaimer-header:hover {
+            background: #dee2e6;
+        }
+
+        .disclaimer-toggle-icon {
+            font-size: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .disclaimer-content {
+            display: none;
+            padding: 12px 15px;
+            border-top: 1px solid #dee2e6;
+            line-height: 1.5;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .disclaimer-content h4 {
+            margin: 0 0 4px 0;
+            font-size: 12px;
+            color: #2c3e50;
+        }
+
+        .disclaimer-content p {
+            margin: 0 0 10px 0;
+        }
+
+        .disclaimer-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .disclaimer-panel.open .disclaimer-content {
+            display: block;
+        }
+
+        .disclaimer-panel.open .disclaimer-toggle-icon {
+            transform: rotate(180deg);
+        }
+
         /* Draggable Panel Styles */
         #draggable-bio-panel {
             display: none;
@@ -127,6 +187,22 @@
         </div>
     </div>
     <div id="map"></div>
+
+    <div class="disclaimer-panel" id="disclaimerPanel">
+        <div class="disclaimer-header" onclick="toggleDisclaimer()">
+            <span>Acknowledgement, Disclaimer & License Info</span>
+            <span class="disclaimer-toggle-icon">▲</span>
+        </div>
+        <div class="disclaimer-content">
+            <h4>Acknowledgement</h4>
+            <p>This visualization webpage is made possible by the Victorian CEDT Index created by the Chinese Australian Family Historians of Victoria (CAFHOV). As descendants of the Poon family, we are deeply grateful for their dedicated work.</p>
+            
+            <h4>Disclaimer</h4>
+            <p>This work is adapted from the Victorian CEDT index created by the Chinese Australian Family Historians of Victoria (CAFHOV). CAFHOV is not affiliated with, does not sponsor or endorse, and bears no responsibility or liability for this reproduced version, including any errors, omissions, or inaccuracies contained herein.</p>
+            
+            <p>This webpage is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.</p>
+        </div>
+    </div>
 </div>
 
 <div id="draggable-bio-panel">
@@ -139,6 +215,11 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+    function toggleDisclaimer() {
+        const panel = document.getElementById('disclaimerPanel');
+        panel.classList.toggle('open');
+    }
+
     const map = L.map('map').setView([-36.5, 145.0], 7);
     const circleLayer = L.layerGroup().addTo(map);
     let currentFilteredData = [];
@@ -155,12 +236,9 @@
         let prevVal = prevYears[changedId];
         let delta = currentVal - prevVal;
         
-        // Determine if this input was caused by manual keyboard typing/deleting vs arrow buttons
-        // Input types containing 'Text' or 'delete' signify manual keystrokes
         let isManualKeyIn = event && event.inputType && (event.inputType.includes('Text') || event.inputType.includes('delete'));
         
         if (delta !== 0) {
-            // Apply delta automatically ONLY if it was not manually keyed in, and usually delta will be exactly 1 or -1
             if (!isManualKeyIn && Math.abs(delta) === 1) {
                 let targetEl = document.getElementById(targetId);
                 let newTargetVal = parseInt(targetEl.value) || 0;
@@ -169,7 +247,6 @@
                 
                 prevYears[targetId] = newTargetVal;
             }
-            // Always update baseline memory
             prevYears[changedId] = currentVal;
         }
         
@@ -336,3 +413,6 @@
 </script>
 </body>
 </html>
+```<FollowUp>
+Would you like to adjust any formatting for the disclaimer section (such as adding hyperlink styling for the Creative Commons license or tweaking the collapse/expand animation)?
+</FollowUp>
